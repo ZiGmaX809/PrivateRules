@@ -1,6 +1,6 @@
 payload:
   # AdBlock
-    - DOMAIN-SUFFIX,a.ckm.iqiyi.com
+  - DOMAIN-SUFFIX,a.ckm.iqiyi.com
   - DOMAIN-SUFFIX,ad.m.iqiyi.com
   - DOMAIN-SUFFIX,afp.iqiyi.com
   - DOMAIN-SUFFIX,androidgo.duapp.com
