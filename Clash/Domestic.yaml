@@ -1,6 +1,6 @@
 payload:
   # Domestic
-    - DOMAIN-KEYWORD,beplay
+  - DOMAIN-KEYWORD,beplay
   - DOMAIN,cdp.cloud.unity3d.com
   - DOMAIN-SUFFIX,battle.net
   - DOMAIN-SUFFIX,battlenet.com
