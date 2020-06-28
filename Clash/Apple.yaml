@@ -1,9 +1,9 @@
 payload:
   # Apple
   - DOMAIN,Apple.comscoreresearch.com
-  - DOMAIN-SUFFIX.cn
-  - DOMAIN-SUFFIX.com
-  - DOMAIN-SUFFIX.news
+  - DOMAIN-SUFFIX,Apple.cn
+  - DOMAIN-SUFFIX,Apple.com
+  - DOMAIN-SUFFIX,Apple.news
   - DOMAIN-SUFFIX,cdn-apple.com
   - DOMAIN-SUFFIX,icloud.com
   - DOMAIN-SUFFIX,icloud.com.cn
