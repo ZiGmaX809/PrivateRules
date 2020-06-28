@@ -1,0 +1,6 @@
+payload:
+  # Nintendo
+  - DOMAIN-SUFFIX,srv.nintendo.net
+  - DOMAIN-SUFFIX,nintendo.com
+  - DOMAIN-SUFFIX,nintendo.net
+  - DOMAIN-KEYWORD,nexon
