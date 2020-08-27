@@ -1,5 +1,5 @@
-#!name=Url Rewrite
-#!desc=Url Rewrite：包含链接跳转、去广告等Rewrite规则
+#!name=Url Rewrite & Scripts
+#!desc=链接跳转、去广告等Rewrite规则和独立脚本
 
 [URL Rewrite]
 # > Redirect Google Service
