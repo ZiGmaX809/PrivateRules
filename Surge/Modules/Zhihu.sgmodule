@@ -1,0 +1,5 @@
+[Script]
+
+
+[MITM]
+hostname = %APPEND% oia.zhihu.com, link.zhihu.com, www.zhihu.com
