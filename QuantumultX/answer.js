@@ -5,7 +5,7 @@
 let obj = JSON.parse($response.body || '{}');
 var title = [];
 var id = [];
-var num = [①,②,③,④,⑤,⑥,⑦,⑧,⑨,⑩]
+var num = ['①','②','③','④','⑤','⑥','⑦','⑧','⑨','⑩']
 
 if (obj.code == 3001) {
     for (i = 0; i < 10; i++) {
