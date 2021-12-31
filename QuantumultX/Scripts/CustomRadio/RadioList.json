@@ -1,10 +1,4 @@
-/************
-通过篡改搜索结果来自定义收听Radio
-************/
-
-let obj = JSON.parse($response.body || '{}');
-
-c_body = {
+{
     "data": {
         "current_page": 1,
         "data": [{
@@ -35,5 +29,3 @@ c_body = {
     },
     "search_type": "radio"
 }
-
-$done({ body: JSON.stringify(c_body) });
