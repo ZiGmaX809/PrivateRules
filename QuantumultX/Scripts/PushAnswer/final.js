@@ -11,7 +11,7 @@ if (obj.code == 3001) {
     for (i = 0; i < 10; i++) {
         let ans = obj.data.list[i].win_id;
         ans = ans.replace('A',choose[0]).replace('B',choose[1]).replace('C',choose[2]).replace('D',choose[3]);
-        id.push(num[i] + "[" + ans + "]");
+        id.push((i+1) + "[" + ans + "]");
         //$notify("之江杯答案", obj.data.list[i].win_id, obj.data.list[i].title);
         //delay(3);
     }
