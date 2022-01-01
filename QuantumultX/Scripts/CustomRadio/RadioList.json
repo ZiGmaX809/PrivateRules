@@ -19,6 +19,11 @@
       "name": "浙江民生资讯广播",
       "url": "http://satellitepull.cnr.cn/live/wxzjmsgb/playlist.m3u8",
       "image": "https://gitee.com/radioer/transparentlogo/raw/master/generalradio/浙江民生广播.png"
+    },
+    {
+      "name": "杭州交通经济广播",
+      "url": "http://livewsa.ximalaya.com/radio-first-page-app/live/632/64.m3u8?transcode=ts",
+      "image": "http://imagev2.xmcdn.com/group74/M05/9D/83/wKgO0l6C9I6iJSG0AACQznxf1WY094.png!op_type=5&upload_type=cover&device_type=ios&name=small&magick=webp&xmagick=webp"
     }
   ]
 }
