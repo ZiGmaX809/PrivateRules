@@ -11,6 +11,11 @@
       "image": "https://gitee.com/radioer/transparentlogo/raw/master/generalradio/浙江交通之声.png"
     },
     {
+      "name": "浙江音乐调频·动听968",
+      "url": "http://satellitepull.cnr.cn/live/wxzj968/playlist.m3u8",
+      "image": "https://gitee.com/radioer/transparentlogo/raw/master/musicradio/动听968.png"
+    },
+    {
       "name": "浙江旅游之声",
       "url": "http://satellitepull.cnr.cn/live/wxzj1045/playlist.m3u8",
       "image": "https://gitee.com/radioer/transparentlogo/raw/master/generalradio/浙江旅游之声.png"
