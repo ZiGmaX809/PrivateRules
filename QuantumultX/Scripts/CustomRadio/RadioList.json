@@ -1,15 +1,19 @@
 {
-    data:[{
-        name : "浙江交通之声",
-        url : "http://satellitepull.cnr.cn/live/wxzjjtgb/playlist.m3u8",
-        image : "https://gitee.com/radioer/transparentlogo/raw/master/generalradio/浙江交通之声.png"
-    },{
-        name : "浙江之声",
-        url : "http://satellitepull.cnr.cn/live/wxzjzs/playlist.m3u8",
-        image : "https://gitee.com/radioer/transparentlogo/raw/master/generalradio/浙江之声.png"
-    },{
-        name : "浙江旅游之声",
-        url : "http://satellitepull.cnr.cn/live/wxzj1045/playlist.m3u8",
-        image : "https://gitee.com/radioer/transparentlogo/raw/master/generalradio/浙江旅游之声.png"
-    }]
+  "data": [
+    {
+      "name": "浙江交通之声",
+      "url": "http://satellitepull.cnr.cn/live/wxzjjtgb/playlist.m3u8",
+      "image": "https://gitee.com/radioer/transparentlogo/raw/master/generalradio/浙江交通之声.png"
+    },
+    {
+      "name": "浙江之声",
+      "url": "http://satellitepull.cnr.cn/live/wxzjzs/playlist.m3u8",
+      "image": "https://gitee.com/radioer/transparentlogo/raw/master/generalradio/浙江之声.png"
+    },
+    {
+      "name": "浙江旅游之声",
+      "url": "http://satellitepull.cnr.cn/live/wxzj1045/playlist.m3u8",
+      "image": "https://gitee.com/radioer/transparentlogo/raw/master/generalradio/浙江旅游之声.png"
+    }
+  ]
 }
