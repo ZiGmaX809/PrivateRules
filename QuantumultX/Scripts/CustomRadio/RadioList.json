@@ -22,8 +22,13 @@
     },
     {
       "name": "杭州交通经济广播",
-      "url": "http://livewsa.ximalaya.com/radio-first-page-app/live/632/64.m3u8?transcode=ts",
+      "url": "http://livewsa.ximalaya.com/radio-first-page-app/live/632/64.m3u8",
       "image": "http://imagev2.xmcdn.com/group74/M05/9D/83/wKgO0l6C9I6iJSG0AACQznxf1WY094.png"
+    },
+    {
+      "name": "杭州西湖之声",
+      "url": "http://livewsa.ximalaya.com/radio-first-page-app/live/635/64.m3u8",
+      "image": "http://imagev2.xmcdn.com/group78/M02/8F/11/wKgO4F6C9LaDB0RYAAB_O87sIKU487.png"
     }
   ]
 }
