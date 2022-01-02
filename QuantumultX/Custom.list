@@ -1,5 +1,4 @@
 #YouTube 去底部广告
 host-suffix, ehg-youtube.hitbox.com, reject
-host-suffix, raw.githubusercontent.com, Custom
 host-suffix, moon.fm, Custom
 host-suffix, backend.moon.fm, Custom
