@@ -1,3 +1,3 @@
-host-suffix, moon.fm
-host-suffix, backend.moon.fm
-host-suffix, amdc.m.taobao.com
+host-suffix, moon.fm, Custom
+host-suffix, backend.moon.fm, Custom
+host-suffix, amdc.m.taobao.com, Direct
