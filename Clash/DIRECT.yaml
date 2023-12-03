@@ -1,10 +1,6 @@
 payload:
   # DIRECT
-  - DOMAIN-KEYWORD,mtalk.google.com
-  - DOMAIN,safebrowsing.googleapis.com
   - DOMAIN-SUFFIX,whatismyip.akamai.com
-  - DOMAIN-SUFFIX,dl.google.com
-  - DOMAIN-SUFFIX,steamcontent.com
   - DOMAIN-SUFFIX,awesome-hd.me
   - DOMAIN-SUFFIX,broadcasthe.net
   - DOMAIN-SUFFIX,chdbits.co
