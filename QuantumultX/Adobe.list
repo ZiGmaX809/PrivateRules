@@ -1,6 +1,6 @@
 host-suffix, ic.adobe.io, Adobe
-host-suffix, *.adobe.io, Adobe
-host-suffix, *.adobe.com, Adobe
+host-suffix, adobe.io, Adobe
+host-suffix, adobe.com, Adobe
 host-suffix, lmlicenses.wip4.adobe.com, Adobe
 host-suffix, lm.licenses.adobe.com, Adobe
 host-suffix, na2m-pr.licenses.adobe.com, Adobe
