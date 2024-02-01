@@ -1,0 +1,9 @@
+! Title: 自用白名单补充
+
+! > 掌阅书城
+bookbk.img.zhangyue01.com^
+
+! > 掌阅更新
+fota5t.adups.cn^
+
+
