@@ -29,3 +29,5 @@ payload:
   - DOMAIN-KEYWORD,torrent
   - DOMAIN-KEYWORD,tracker
   - DOMAIN-SUFFIX,smtp
+  - DOMAIN-SUFFIX,hdpt.xyz
+  - DOMAIN-SUFFIX,hddolby.com
