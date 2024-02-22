@@ -1,7 +1,6 @@
 payload:
   # Custom
   - DOMAIN-SUFFIX,kp.m-team.cc
-  - DOMAIN-SUFFIX,audiences.me
   - DOMAIN-SUFFIX,torrentmac.net
   - DOMAIN-SUFFIX,cdn.jsdelivr.net
   - DOMAIN-SUFFIX,nga.178.com
