@@ -1,11 +1,8 @@
 payload:
   # Custom
-  - DOMAIN-SUFFIX,kp.m-team.cc
   - DOMAIN-SUFFIX,torrentmac.net
   - DOMAIN-SUFFIX,cdn.jsdelivr.net
-  - DOMAIN-SUFFIX,nga.178.com
   - DOMAIN-SUFFIX,mac.qdrayst.com
-  - DOMAIN-SUFFIX,www.pttime.org
   - DOMAIN-SUFFIX,azureedge.net
   - DOMAIN-SUFFIX,themoviedb.org
   - DOMAIN-SUFFIX,*.appmiu.com
