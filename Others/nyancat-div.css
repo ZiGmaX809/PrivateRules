@@ -44,6 +44,7 @@
     margin-right: -15px;
     margin-left: -10px;
 }
+
 .nyan-cat-progress-bar[value="0"] {
     width: 0%;
 }
