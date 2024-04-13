@@ -9,7 +9,7 @@
 
 .nyan-cat-progress-container {
     width: 80%;
-    height: 12px;
+    height: 14px;
     background-image: var(--nyan-cat-bg-img);
     border-radius: 6px;
     border: 0;
@@ -40,7 +40,7 @@
     background-image: var(--nyan-cat-icon-img);
     width: 34px;
     height: 21px;
-    margin-top: -4px ;
+    margin-top: -3px ;
     margin-right: -15px;
     margin-left: -10px;
 }
