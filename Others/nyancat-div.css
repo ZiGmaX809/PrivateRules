@@ -8,7 +8,7 @@
 }
 
 .nyan-cat-progress-container {
-    width: 6vw;
+    width: 12vw;
     height: 14px;
     background-image: var(--nyan-cat-bg-img);
     border-radius: 6px;
