@@ -8,12 +8,13 @@
 }
 
 .nyan-cat-progress-container {
-    width: 80%;
+    width: 6vw;
     height: 14px;
     background-image: var(--nyan-cat-bg-img);
     border-radius: 6px;
     border: 0;
-    max-width: 100%;
+    max-width: 160px;
+    min-width: 140px;
     margin-left: 0px;
 }
 
