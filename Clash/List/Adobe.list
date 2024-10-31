@@ -1,1 +1,6 @@
-
+DOMAIN-SUFFIX,adobe.io
+DOMAIN-SUFFIX,*.adobe.io
+DOMAIN-SUFFIX,photo-api.adobe.io
+DOMAIN-KEYWORD,adobe
+DOMAIN-KEYWORD,Adobe
+PROCESS-NAME,Photoshop
