@@ -18,7 +18,6 @@ const $ = new Env('weread');
 
 !(async () => {
 	if ($request.url.indexOf('/book/read') !== -1) {
-		$.msg('- 正在获取Skey, 请稍后');
 		await processRequest();
 	} else if ($request.url.indexOf('/user/notebooks') !== -1) {
 		await fetchNotebooks();
@@ -59,9 +58,12 @@ async function fetchNotebooks() {
 
 		// 获取原始 Cookie
 		let originalCookie = $request.headers['Cookie'] || '';
+        $.log('原始 Cookie:', originalCookie);
 
 		// 替换 wr_skey
 		let newCookie = originalCookie.replace(/wr_skey=[^;]+/, `wr_skey=${skey}`);
+        $.log('替换后的 Cookie:', newCookie);
+        
 		// 更新请求头
 		$request.headers['Cookie'] = newCookie;
 
