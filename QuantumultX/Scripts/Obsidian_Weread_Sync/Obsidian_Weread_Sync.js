@@ -16,15 +16,9 @@ hostname = i.weread.qq.com
 
 const $ = new Env("weread");
 
-const now = new Date().getTime();
-const lastFetchTime = $prefs.valueForKey("weread_skey_last_fetch") || 0;
-const cacheDuration = 5 * 60 * 1000; // 5分钟缓存（单位：毫秒）
-
 !(async () => {
   if ($request.url.indexOf("/readdata/detail") !== -1) {
-    if (now - lastFetchTime > cacheDuration) {
       await processRequest();
-    }
   } else if ($request.url.indexOf("/user/notebooks") !== -1) {
     fetchNotebooks();
   }
@@ -48,7 +42,6 @@ async function processRequest() {
 
     // 保存到 Quantumult X 持久化存储
     $prefs.setValueForKey(skey, "weread_skey");
-    $prefs.setValueForKey(now, "weread_skey_last_fetch");
 
     $.msg(`微信读书skey:${skey}保存成功`,'请前往Obsidian同步阅读数据');
     $done();
