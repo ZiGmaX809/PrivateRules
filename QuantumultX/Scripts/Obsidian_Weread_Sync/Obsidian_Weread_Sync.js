@@ -17,9 +17,17 @@ hostname = i.weread.qq.com
 const $ = new Env("weread");
 
 !(async () => {
-  if ($request.url.indexOf("/readdata/detail") !== -1) {
-      await processRequest();
-  } else if ($request.url.indexOf("/user/notebooks") !== -1 || $request.url.indexOf("/book/chapterInfos") === -1 || $request.url.indexOf("/book/bookmarklist") === -1) {
+  const url = $request.url;
+  // 1. 提取请求路径
+  const isReadDataDetail = url.includes("/readdata/detail");
+  const isUserNotebooks = url.includes("/user/notebooks");
+  const isChapterInfos = url.includes("/book/chapterInfos");
+  const isBookmarkList = url.includes("/book/bookmarklist");
+
+  if (isReadDataDetail) {
+    await processRequest();
+  }
+  else if (isUserNotebooks || isChapterInfos || isBookmarkList) {
     fetchNotebooks();
   }
 })()
