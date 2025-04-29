@@ -18,18 +18,20 @@ const $ = new Env("weread");
 
 !(async () => {
   const url = $request.url;
-  const isReadDataDetail = url.includes("/readdata/detail");
-  const isUserNotebooks = url.includes("/user/notebooks");
-  const isChapterInfos = url.includes("/book/chapterInfos");
-  const isBookmarkList = url.includes("/book/bookmarklist");
-  const isBookinfo = url.includes("/book/info");
-  const isBookreadinfo = url.includes("/book/readinfo");
-  const isReview = url.includes("/review/list");
 
-  if (isReadDataDetail) {
+  const routeMatcher = {
+    // 精确匹配
+    dataDetail: /\/readdata\/detail/.test(url),
+    userNotebooks: /\/user\/notebooks/.test(url),
+    // 动态匹配 book/ 下的若干路径
+    bookAPIs: /\/book\/(chapterInfos|bookmarklist|info|readinfo)/.test(url),
+    reviewAPIs: /\/review\/list/.test(url),
+  };
+  const { dataDetail, userNotebooks, bookAPIs, reviewAPIs } = routeMatcher;
+
+  if (dataDetail) {
     await processRequest();
-  }
-  else if (isUserNotebooks || isChapterInfos || isBookmarkList || isBookinfo || isBookreadinfo || isReview) {
+  } else if (userNotebooks || bookAPIs || reviewAPIs) {
     fetchNotebooks();
   }
 })()
@@ -53,7 +55,7 @@ async function processRequest() {
     // 保存到 Quantumult X 持久化存储
     $prefs.setValueForKey(skey, "weread_skey");
 
-    $.msg(`微信读书skey:${skey}保存成功`,'请前往Obsidian同步阅读数据');
+    $.msg(`微信读书skey:${skey}保存成功`, "请前往Obsidian同步阅读数据");
     $done();
   } catch (e) {
     $.log(`意外错误: ${e.message}`);
