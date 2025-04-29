@@ -61,6 +61,7 @@ async function processRequest() {
 // 获取笔记本列表
 function fetchNotebooks() {
   const skey = $prefs.valueForKey("weread_skey");
+  $.log(skey.length)
   // 获取原始 Cookie
   let originalCookie = $request.headers["Cookie"] || "";
 
