@@ -22,7 +22,7 @@ const $ = new Env('weread');
 
 !(async () => {
 	if (typeof $request != 'undefined') {
-		$.log('- 正在获取Skey, 请稍后');
+		$.msg('- 正在获取Skey, 请稍后');
 		await processRequest();
 	}
 })()
@@ -32,72 +32,66 @@ const $ = new Env('weread');
 // 处理请求的主函数
 async function processRequest() {
     try {
-        $.log("微信读书 skey 更新器运行中...");
-        
-        // 从请求头中获取 skey
-        const skey = $request.headers['skey'] || $request.headers['Skey'] || '';
-        
-        if (!skey) {
-            $.log("请求头中未找到 skey");
-            $done({});
-            return;
-        }
-        
-        $.log(`找到 skey: ${skey}`);
-        
-        // 读取 data.json 文件
-        $persistentStore.read({
-            key: 'weread-data-file',
-            path: dataFilePath
-        }, (response) => {
-            if (response.error) {
-                $.log(`读取文件错误: ${response.error}`);
-                $done({});
-                return;
-            }
-            
-            try {
-                // 解析 JSON 数据
-                let data = JSON.parse(response.value);
-                
-                // 查找并更新 wr_skey 条目
-                let updated = false;
-                for (let i = 0; i < data.length; i++) {
-                    if (data[i].name === "wr_skey") {
-                        data[i].value = skey;
-                        updated = true;
-                        break;
-                    }
-                }
-                
-                // 如果 wr_skey 不存在，则添加它
-                if (!updated) {
-                    data.push({
-                        name: "wr_skey",
-                        value: skey
-                    });
-                }
-                
-                // 写回文件
-                $persistentStore.write({
-                    key: 'weread-data-file',
-                    value: JSON.stringify(data, null, 2),
-                    path: dataFilePath
-                }, (writeResponse) => {
-                    if (writeResponse.error) {
-                        $.log(`写入文件错误: ${writeResponse.error}`);
-                    } else {
-                        $.log(`成功更新 skey 为: ${skey}`);
-                        $notify("微信读书 skey 已更新", "", `成功更新 skey 为: ${skey}`);
-                    }
-                    $done({});
-                });
-            } catch (e) {
-                $.log(`解析 JSON 错误: ${e.message}`);
-                $done({});
-            }
-        });
-    } catch (e) {
+			$.log('微信读书 skey 更新器运行中...');
+
+			// 从请求头中获取 skey
+			const skey = $request.headers['skey'] || $request.headers['Skey'] || '';
+
+			if (!skey) {
+				$.log('请求头中未找到 skey');
+				$done({});
+				return;
+			}
+
+			$.msg(`找到 skey: ${skey}`);
+
+			// 读取 data.json 文件
+			if ($file.exists(dataFilePath)) {
+				let content = $file.read(dataFilePath);
+				try {
+					// 解析 JSON 数据
+					let data = JSON.parse(content.string);
+
+					// 查找并更新 wr_skey 条目
+					let updated = false;
+					for (let i = 0; i < data.length; i++) {
+						if (data[i].name === 'wr_skey') {
+							data[i].value = skey;
+							updated = true;
+							break;
+						}
+					}
+
+					// 如果 wr_skey 不存在，则添加它
+					if (!updated) {
+						data.push({
+							name: 'wr_skey',
+							value: skey,
+						});
+					}
+
+					// 写回文件
+					const success = $file.write({
+						data: $data({ string: JSON.stringify(data, null, 2) }),
+						path: dataFilePath,
+					});
+
+					if (success) {
+						$.msg(`成功更新 skey 为: ${skey}`);
+						$notify('微信读书 skey 已更新', '', `成功更新 skey 为: ${skey}`);
+					} else {
+						$.msg('写入文件失败');
+						$notify('微信读书 skey 更新失败', '', '无法写入文件，请检查文件路径权限');
+					}
+				} catch (e) {
+					$.msg(`解析 JSON 错误: ${e.message}`);
+					$notify('微信读书 skey 更新失败', '', `解析 JSON 错误: ${e.message}`);
+				}
+			} else {
+				$.msg(`文件不存在: ${dataFilePath}`);
+				$notify('微信读书 skey 更新失败', '', `文件不存在: ${dataFilePath}`);
+			}
+		} catch (e) {
         $.log(`意外错误: ${e.message}`);
         $done({});
     }
