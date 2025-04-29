@@ -3,7 +3,8 @@
  * 
  * 功能说明：
  * 该脚本从微信读书请求头中提取 skey 值，
- * 并更新到 Obsidian 微信读书插件的 data.json 文件中
+ * 并拦截变更 Obsidian 微信读书插件更新 skey 的请求
+ * 建议不同步时关闭脚本以节约系统资源
  * 
  * 配置说明：
  * [rewrite_local]
