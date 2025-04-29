@@ -50,10 +50,10 @@ async function processRequest() {
     $prefs.setValueForKey(skey, "weread_skey");
     $prefs.setValueForKey(now, "weread_skey_last_fetch");
 
-    $.msg(`微信读书skey:${skey}保存成功`,"请尽快在 Obsidian 中使用插件进行同步",);
+    $.msg("微信读书skey保存成功");
     $done();
   } catch (e) {
-    $.log(`意外错误: ${e.message}`);
+    $.log(`意外错误1: ${e.message}`);
     $done({});
   }
 }
@@ -61,7 +61,6 @@ async function processRequest() {
 // 获取笔记本列表
 function fetchNotebooks() {
   const skey = $prefs.valueForKey("weread_skey");
-  $.log(skey.length)
   // 获取原始 Cookie
   let originalCookie = $request.headers["Cookie"] || "";
 
