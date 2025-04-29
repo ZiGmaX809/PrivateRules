@@ -20,8 +20,17 @@ const dataFilePath =
 
 const $ = new Env('weread');
 
+!(async () => {
+	if (typeof $request != 'undefined') {
+		$.log('- 正在获取Skey, 请稍后');
+		await processRequest();
+	}
+})()
+	.catch(e => $.logErr(e))
+	.finally(() => $.done());
+
 // 处理请求的主函数
-function processRequest() {
+async function processRequest() {
     try {
         $.log("微信读书 skey 更新器运行中...");
         
@@ -94,13 +103,7 @@ function processRequest() {
     }
 }
 
-// 如果这是一个请求，则开始处理
-if ($request) {
-    processRequest();
-} else {
-    $.log("此脚本应作为请求脚本使用");
-    $done({});
-}
+
 
 
 // Wbi签名获取
