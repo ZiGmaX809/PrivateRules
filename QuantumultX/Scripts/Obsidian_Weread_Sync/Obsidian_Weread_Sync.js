@@ -18,16 +18,16 @@ const $ = new Env("weread");
 
 !(async () => {
   const url = $request.url;
-  // 1. 提取请求路径
   const isReadDataDetail = url.includes("/readdata/detail");
   const isUserNotebooks = url.includes("/user/notebooks");
   const isChapterInfos = url.includes("/book/chapterInfos");
   const isBookmarkList = url.includes("/book/bookmarklist");
+  const isReview = url.includes("/review/list");
 
   if (isReadDataDetail) {
     await processRequest();
   }
-  else if (isUserNotebooks || isChapterInfos || isBookmarkList) {
+  else if (isUserNotebooks || isChapterInfos || isBookmarkList || isReview) {
     fetchNotebooks();
   }
 })()
