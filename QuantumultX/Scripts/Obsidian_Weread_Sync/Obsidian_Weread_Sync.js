@@ -21,7 +21,7 @@ const lastFetchTime = $prefs.valueForKey("weread_skey_last_fetch") || 0;
 const cacheDuration = 5 * 60 * 1000; // 5分钟缓存（单位：毫秒）
 
 !(async () => {
-  if ($request.url.indexOf("/shelf/syncbook") !== -1) {
+  if ($request.url.indexOf("/readdata/detail") !== -1) {
     if (now - lastFetchTime > cacheDuration) {
       await processRequest();
     }
