@@ -23,12 +23,13 @@ const $ = new Env("weread");
   const isChapterInfos = url.includes("/book/chapterInfos");
   const isBookmarkList = url.includes("/book/bookmarklist");
   const isBookinfo = url.includes("/book/info");
+  const isBookreadinfo = url.includes("/book/readinfo");
   const isReview = url.includes("/review/list");
 
   if (isReadDataDetail) {
     await processRequest();
   }
-  else if (isUserNotebooks || isChapterInfos || isBookmarkList || isBookinfo || isReview) {
+  else if (isUserNotebooks || isChapterInfos || isBookmarkList || isBookinfo || isBookreadinfo || isReview) {
     fetchNotebooks();
   }
 })()
