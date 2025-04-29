@@ -1,16 +1,18 @@
-/**
- * 微信读书 skey 更新器 (Quantumult X 版)
- * 
- * 该脚本从微信读书请求头中提取 skey 值，
- * 并更新到 Obsidian 微信读书插件的 data.json 文件中
- * 
- * [rewrite_local]
- * # 微信读书 skey 捕获
- * ^https?:\/\/i\.weread\.qq\.com\/book\/read url script-request-header weread_skey_updater.js
- *
- * [mitm]
- * hostname = i.weread.qq.com
- */
+/***********************************
+> 微信读书 skey 更新器 (Quantumult X 版)
+>  
+> 该脚本从微信读书请求头中提取 skey 值，
+> 并更新到 Obsidian 微信读书插件的 data.json 文件中
+> 
+
+[rewrite_local]
+# 微信读书 skey 捕获
+^https?:\/\/i\.weread\.qq\.com\/book\/read url script-request-header weread_skey_updater.js
+
+[mitm]
+hostname = i.weread.qq.com
+
+***********************************/
 
 // Obsidian 微信读书插件数据文件路径
 const dataFilePath =
