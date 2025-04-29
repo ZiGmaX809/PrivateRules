@@ -61,9 +61,9 @@ async function fetchNotebooks() {
         $.log('原始 Cookie:', originalCookie);
 
 		// 替换 wr_skey
-		let newCookie = originalCookie.replace(/wr_skey=[^;]+/, `wr_skey=${skey}`);
+		let newCookie = originalCookie.replace(/wr_skey=[^;|`]+/, `wr_skey=${skey}`);
         $.log('替换后的 Cookie:', newCookie);
-        
+
 		// 更新请求头
 		$request.headers['Cookie'] = newCookie;
 
