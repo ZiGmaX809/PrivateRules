@@ -7,73 +7,78 @@
 
 [rewrite_local]
 # 微信读书 skey 捕获
-^https?:\/\/i\.weread\.qq\.com\/book\/read url script-request-header weread_skey_updater.js
+^https?:\/\/i\.weread\.qq\.com\ url script-request-header weread_skey_updater.js
 
 [mitm]
 hostname = i.weread.qq.com
 
 ***********************************/
 
-const $ = new Env('weread');
+const $ = new Env("weread");
+
+const now = new Date().getTime();
+const lastFetchTime = $prefs.valueForKey("weread_skey_last_fetch") || 0;
+const cacheDuration = 5 * 60 * 1000; // 5分钟缓存（单位：毫秒）
 
 !(async () => {
-	if ($request.url.indexOf('/book/read') !== -1) {
-		await processRequest();
-	} else if ($request.url.indexOf('/user/notebooks') !== -1) {
-		await fetchNotebooks();
-	}
+  if ($request.url.indexOf("/book/read") !== -1) {
+    if (now - lastFetchTime > cacheDuration) {
+      await processRequest();
+    }
+  } else if ($request.url.indexOf("/user/notebooks") !== -1) {
+    fetchNotebooks();
+  }
 })()
-	.catch(e => $.logErr(e))
-	.finally(() => $.done());
+  .catch((e) => $.logErr(e))
+  .finally(() => $.done());
 
 // 处理请求的主函数
 async function processRequest() {
-	try {
-		$.log('微信读书 skey 更新器运行中...');
+  try {
+    $.log("微信读书 skey 更新器运行中...");
 
-		// 从请求头中获取 skey
-		const skey = $request.headers['skey'] || $request.headers['Skey'] || '';
+    // 从请求头中获取 skey
+    const skey = $request.headers["skey"] || $request.headers["Skey"] || "";
 
-		if (!skey) {
-			$.log('请求头中未找到 skey');
-			$done({});
-			return;
-		}
+    if (!skey) {
+      $.log("请求头中未找到 skey");
+      $done({});
+      return;
+    }
 
-		// 保存到 Quantumult X 持久化存储
-		$prefs.setValueForKey(skey, 'weread_skey');
+    // 保存到 Quantumult X 持久化存储
+    $prefs.setValueForKey(skey, "weread_skey");
+    $prefs.setValueForKey(now, "weread_skey_last_fetch");
 
-		$.msg('微信读书skey保存成功');
-		$done();
-	} catch (e) {
-		$.log(`意外错误: ${e.message}`);
-		$done({});
-	}
+    $.msg("微信读书skey保存成功","请尽快在 Obsidian 中使用插件进行同步",);
+    $done();
+  } catch (e) {
+    $.log(`意外错误1: ${e.message}`);
+    $done({});
+  }
 }
 
 // 获取笔记本列表
-async function fetchNotebooks() {
-	try {
-		$.log('正在获取微信读书笔记本列表...');
+function fetchNotebooks() {
+  const skey = $prefs.valueForKey("weread_skey");
+  // 获取原始 Cookie
+  let originalCookie = $request.headers["Cookie"] || "";
 
-		// 获取原始 Cookie
-		let originalCookie = $request.headers['Cookie'] || '';
-        $.log('原始 Cookie:', originalCookie);
+  // 替换 wr_skey
+  const newCookie = originalCookie.replace(
+    /wr_skey=[^;|`]+/,
+    `wr_skey=${skey}`
+  );
+  $.log("替换后的 Cookie:", newCookie);
 
-		// 替换 wr_skey
-		let newCookie = originalCookie.replace(/wr_skey=[^;|`]+/, `wr_skey=${skey}`);
-        $.log('替换后的 Cookie:', newCookie);
-
-		// 更新请求头
-		$request.headers['Cookie'] = newCookie;
-
-		// 完成修改
-		$done({ headers: $request.headers });
-	} catch (e) {
-		$done();
-	}
+  // 深拷贝 headers 并修改（避免只读错误）
+  const newHeaders = {
+    ...$request.headers, // 展开原 headers
+    Cookie: newCookie, // 覆盖 Cookie
+  };
+  // 返回修改后的请求
+  $done({ headers: newHeaders });
 }
-
 
 /***************** Env *****************/
 // prettier-ignore
