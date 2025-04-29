@@ -19,7 +19,7 @@ const $ = new Env("weread");
 !(async () => {
   if ($request.url.indexOf("/readdata/detail") !== -1) {
       await processRequest();
-  } else if ($request.url.indexOf("/user/notebooks") !== -1) {
+  } else if ($request.url.indexOf("/user/notebooks") !== -1 || $request.url.indexOf("/book/chapterInfos") === -1 || $request.url.indexOf("/book/bookmarklist") === -1) {
     fetchNotebooks();
   }
 })()
