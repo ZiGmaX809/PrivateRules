@@ -21,18 +21,18 @@ const dataFilePath =
 // 处理请求的主函数
 function processRequest() {
     try {
-        console.log("微信读书 skey 更新器运行中...");
+        $.log("微信读书 skey 更新器运行中...");
         
         // 从请求头中获取 skey
         const skey = $request.headers['skey'] || $request.headers['Skey'] || '';
         
         if (!skey) {
-            console.log("请求头中未找到 skey");
+            $.log("请求头中未找到 skey");
             $done({});
             return;
         }
         
-        console.log(`找到 skey: ${skey}`);
+        $.log(`找到 skey: ${skey}`);
         
         // 读取 data.json 文件
         $persistentStore.read({
@@ -40,7 +40,7 @@ function processRequest() {
             path: dataFilePath
         }, (response) => {
             if (response.error) {
-                console.log(`读取文件错误: ${response.error}`);
+                $.log(`读取文件错误: ${response.error}`);
                 $done({});
                 return;
             }
@@ -74,20 +74,20 @@ function processRequest() {
                     path: dataFilePath
                 }, (writeResponse) => {
                     if (writeResponse.error) {
-                        console.log(`写入文件错误: ${writeResponse.error}`);
+                        $.log(`写入文件错误: ${writeResponse.error}`);
                     } else {
-                        console.log(`成功更新 skey 为: ${skey}`);
+                        $.log(`成功更新 skey 为: ${skey}`);
                         $notify("微信读书 skey 已更新", "", `成功更新 skey 为: ${skey}`);
                     }
                     $done({});
                 });
             } catch (e) {
-                console.log(`解析 JSON 错误: ${e.message}`);
+                $.log(`解析 JSON 错误: ${e.message}`);
                 $done({});
             }
         });
     } catch (e) {
-        console.log(`意外错误: ${e.message}`);
+        $.log(`意外错误: ${e.message}`);
         $done({});
     }
 }
@@ -96,6 +96,6 @@ function processRequest() {
 if ($request) {
     processRequest();
 } else {
-    console.log("此脚本应作为请求脚本使用");
+    $.log("此脚本应作为请求脚本使用");
     $done({});
 }
