@@ -46,7 +46,7 @@ async function processRequest() {
     $.msg(`微信读书skey:${skey}保存成功`,'请前往Obsidian同步阅读数据');
     $done();
   } catch (e) {
-    $.log(`意外错误1: ${e.message}`);
+    $.log(`意外错误: ${e.message}`);
     $done({});
   }
 }
