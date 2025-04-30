@@ -47,14 +47,10 @@ const $ = new Env("weread");
       // 首先检查是否已经有保存的skey
       const existingSkey = $prefs.valueForKey("weread_skey");
       const currentSkey = $request.headers["skey"] || $request.headers["Skey"] || "";
-
+      
       // 只有当没有保存过skey或当前skey与保存的不同时才进行处理
       if (!existingSkey || (currentSkey && existingSkey !== currentSkey)) {
-        // 保存到 Quantumult X 持久化存储中
-        $prefs.setValueForKey(skey, "weread_skey");
-
-        // 通知用户skey保存成功
-        $.msg(`微信读书skey已更新`, `新的skey已保存`, "请前往Obsidian同步阅读数据");
+        await extractAndSaveSkey();
       } else {
         $.log("已有保存的skey，跳过提取");
         $done({});
@@ -70,6 +66,36 @@ const $ = new Env("weread");
   .catch((e) => $.logErr(e))  // 捕获并记录错误
   .finally(() => $.done());    // 完成请求处理
 
+/**
+ * 从请求头中提取skey并保存到QX持久化存储
+ * 避免重复提取相同的skey
+ */
+async function extractAndSaveSkey() {
+  try {
+    $.log("微信读书 skey 提取器运行中...");
+
+    // 从请求头中获取 skey (兼容大小写)
+    const skey = $request.headers["skey"] || $request.headers["Skey"] || "";
+
+    // skey为空则退出
+    if (!skey) {
+      $.log("请求头中未找到 skey");
+      $done({});
+      return;
+    }
+
+    // 保存到 Quantumult X 持久化存储中
+    $prefs.setValueForKey(skey, "weread_skey");
+
+    // 通知用户skey保存成功
+    $.msg(`微信读书skey已更新`, `新的skey已保存`, "请前往Obsidian同步阅读数据");
+    $done();
+  } catch (e) {
+    // 异常处理
+    $.log(`提取skey时发生错误: ${e.message}`);
+    $done({});
+  }
+}
 
 /**
  * 处理Obsidian插件请求，将保存的skey注入到Cookie中
