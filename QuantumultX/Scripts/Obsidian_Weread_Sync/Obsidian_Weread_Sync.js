@@ -113,7 +113,7 @@ function injectSkeyCookie() {
   }
   
   // 获取原始请求的Cookie
-  let originalCookie = $request.headers["Cookie"] || "";
+  let originalCookie = $request.headers["cookie"] ||$request.headers["Cookie"] || "";
 
   // Cookie为空则通知并退出
   if (!originalCookie) {
