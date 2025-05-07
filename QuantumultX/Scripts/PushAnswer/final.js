@@ -35,7 +35,7 @@ const processResponse = function(response) {
         
         // 创建通知
         $notify(
-          "模拟考试答案提示", 
+          "模拟考试", 
           `【${typeName}】题目ID: ${questionId}`,
           `正确答案: ${answer}${answerText ? "\n" + answerText : ""}`
         );
