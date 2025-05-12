@@ -300,7 +300,8 @@ function addBoxJSSubscription() {
 		author: '@ZiGma',
 		repo: 'https://github.com/ZiGmaX809/PrivateRules',
 		icons: [
-			'https://raw.githubusercontent.com/ZiGmaX809/PrivateRules/refs/heads/master/QuantumultX/img/weread.png'
+			'https://raw.githubusercontent.com/ZiGmaX809/PrivateRules/refs/heads/master/QuantumultX/img/weread.png',
+			'https://raw.githubusercontent.com/ZiGmaX809/PrivateRules/refs/heads/master/QuantumultX/img/weread.png',
 		],
 	};
 
