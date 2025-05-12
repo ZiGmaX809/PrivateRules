@@ -297,11 +297,10 @@ function addBoxJSSubscription() {
 				desc: '是否将信息上传到GitHub Gist',
 			},
 		],
-		author: '@YourName',
-		repo: 'https://github.com/yourusername/yourrepo',
+		author: '@ZiGma',
+		repo: 'https://github.com/ZiGmaX809/PrivateRules',
 		icons: [
-			'https://raw.githubusercontent.com/Orz-3/mini/master/Color/Read.png',
-			'https://raw.githubusercontent.com/Orz-3/mini/master/Color/Read.png',
+			'https://raw.githubusercontent.com/ZiGmaX809/PrivateRules/refs/heads/master/QuantumultX/img/weread.png'
 		],
 	};
 
