@@ -1,5 +1,5 @@
 /**
- * 微信读书登录请求监控脚本 (BoxJS版)
+ * 微信读书登录请求监控脚本 (BoxJS版) - 改进版
  * 功能说明：
  * 1. 监控https://i.weread.qq.com/login的请求
  * 2. 提取header中的vid和完整的request_body
@@ -24,6 +24,7 @@ let boxjsConfig = {
 		'wr_gist_filename',
 		'wr_gist_description',
 		'wr_enable_gist',
+		'wr_debug_mode',
 	],
 };
 
@@ -34,39 +35,49 @@ let gistId = $.getdata('wr_gist_id') || '';
 let gistFilename = $.getdata('wr_gist_filename') || 'weread_login_info.json';
 let gistDescription = $.getdata('wr_gist_description') || '微信读书登录信息';
 let enableGistUpload = $.getdata('wr_enable_gist') === 'true';
+let debugMode = $.getdata('wr_debug_mode') === 'true';
 
 // 配置通知信息
 const NOTIFY_TITLE = '微信读书登录信息';
 const NOTIFY_SUCCESS_MSG = '登录信息已成功提取';
 const NOTIFY_ERROR_MSG = '登录信息提取失败';
 
+// 调试日志函数
+function debugLog(message) {
+	if (debugMode) {
+		console.log(`[DEBUG] ${message}`);
+	}
+}
+
 // 函数：推送数据到GitHub Gist
 function pushToGist(data) {
 	if (!enableGistUpload) {
-		console.log('Gist上传功能已禁用');
+		debugLog('Gist上传功能已禁用');
 		return;
 	}
 
 	if (!githubToken) {
-		console.log('请先在BoxJS中设置有效的GitHub Token');
+		debugLog('请先在BoxJS中设置有效的GitHub Token');
 		$.msg(NOTIFY_TITLE, 'Gist上传失败', '请先在BoxJS中设置有效的GitHub Token');
 		return;
 	}
 
 	// 构建内容
 	const timestamp = new Date().toISOString();
+	debugLog(`开始推送到Gist，时间戳: ${timestamp}`);
 
 	// 添加时间戳到数据中
 	const dataWithTimestamp = {
 		...data,
 		timestamp: timestamp,
-		// deviceInfo: {
-		// 	device: $.isNode ? 'Node.js' : $.isQuanX ? 'QuanX' : $.isSurge ? 'Surge' : 'Unknown',
-		// 	version: $.isNode ? process.version : 'App',
-		// },
+		deviceInfo: {
+			device: $.isNode() ? 'Node.js' : $.isQuanX() ? 'QuanX' : $.isSurge() ? 'Surge' : 'Unknown',
+			version: $.isNode() ? process.version : 'App',
+		},
 	};
 
 	const content = JSON.stringify(dataWithTimestamp, null, 2);
+	debugLog(`准备推送的内容长度: ${content.length} 字节`);
 
 	// 构建文件对象
 	const files = {};
@@ -77,9 +88,11 @@ function pushToGist(data) {
 	// 判断是更新还是创建Gist
 	if (gistId && gistId.trim() !== '') {
 		// 更新现有Gist
+		debugLog(`使用现有Gist ID: ${gistId}`);
 		updateGist(gistId, files, timestamp);
 	} else {
 		// 创建新的Gist
+		debugLog('创建新的Gist');
 		createGist(files, timestamp);
 	}
 }
@@ -87,6 +100,7 @@ function pushToGist(data) {
 // 函数：创建新的Gist
 function createGist(files, timestamp) {
 	const gistUrl = 'https://api.github.com/gists';
+	debugLog(`准备创建Gist，调用API: ${gistUrl}`);
 
 	const body = {
 		description: `${gistDescription} - ${timestamp}`,
@@ -98,7 +112,10 @@ function createGist(files, timestamp) {
 		Authorization: `token ${githubToken}`,
 		'User-Agent': 'Quantumult X Script',
 		'Content-Type': 'application/json',
+		Accept: 'application/json',
 	};
+
+	debugLog('发送创建Gist请求...');
 
 	// 发送创建Gist的请求
 	const requestOptions = {
@@ -109,17 +126,21 @@ function createGist(files, timestamp) {
 
 	$.post(requestOptions, (error, response, data) => {
 		if (error) {
-			console.log('Gist创建请求失败: ' + error);
-			$.msg(NOTIFY_TITLE, 'Gist创建请求失败', error);
+			console.log(`Gist创建请求失败: ${JSON.stringify(error)}`);
+			debugLog(`错误详情: ${JSON.stringify(error)}`);
+			$.msg(NOTIFY_TITLE, 'Gist创建请求失败', `${error}`);
 			return;
 		}
 
+		// 获取HTTP状态码
 		const statusCode = response.status || response.statusCode || 0;
+		debugLog(`Gist创建响应状态码: ${statusCode}`);
 
 		if (statusCode === 201) {
 			try {
 				const respData = JSON.parse(data);
 				const newGistId = respData.id;
+				debugLog(`成功创建Gist，ID: ${newGistId}`);
 				console.log(`成功创建Gist，ID: ${newGistId}`);
 				$.msg(NOTIFY_TITLE, 'Gist创建成功', `ID: ${newGistId}\n请将此ID保存到BoxJS中`);
 
@@ -127,20 +148,22 @@ function createGist(files, timestamp) {
 				$.setdata(newGistId, 'wr_gist_id');
 				gistId = newGistId;
 			} catch (e) {
-				console.log('解析Gist响应失败: ' + e);
+				console.log(`解析Gist响应失败: ${e}`);
+				debugLog(`解析响应数据失败: ${e}, 响应数据: ${data}`);
 				$.msg(NOTIFY_TITLE, 'Gist创建成功', '但无法解析返回的ID');
 			}
 		} else {
-			console.log(`Gist创建失败: ${statusCode}`);
-			console.log(data);
-			$.msg(NOTIFY_TITLE, 'Gist创建失败', `状态码: ${statusCode}`);
+			console.log(`Gist创建失败: 状态码 ${statusCode}`);
+			debugLog(`创建失败响应数据: ${data}`);
+			$.msg(NOTIFY_TITLE, 'Gist创建失败', `状态码: ${statusCode}\n${data.substring(0, 100)}`);
 		}
 	});
 }
 
-// 函数：更新现有Gist
+// 函数：更新现有Gist - 修正为使用PATCH方法
 function updateGist(gistId, files, timestamp) {
 	const gistUrl = `https://api.github.com/gists/${gistId}`;
+	debugLog(`准备更新Gist，调用API: ${gistUrl}`);
 
 	const body = {
 		description: `${gistDescription} - 更新于 ${timestamp}`,
@@ -151,55 +174,99 @@ function updateGist(gistId, files, timestamp) {
 		Authorization: `token ${githubToken}`,
 		'User-Agent': 'Quantumult X Script',
 		'Content-Type': 'application/json',
+		Accept: 'application/json',
 	};
 
-	// 发送更新Gist的请求
-	const requestOptions = {
-		url: gistUrl,
-		headers: headers,
-		body: JSON.stringify(body),
-	};
+	debugLog('发送更新Gist请求...');
 
-	$.post(requestOptions, (error, response, data) => {
-		if (error) {
-			console.log('Gist更新请求失败: ' + error);
-			$.msg(NOTIFY_TITLE, 'Gist更新请求失败', error);
-			return;
+	// 使用自定义方法发送PATCH请求
+	customRequest(
+		{
+			url: gistUrl,
+			headers: headers,
+			body: JSON.stringify(body),
+			method: 'PATCH',
+		},
+		(error, response, data) => {
+			if (error) {
+				console.log(`Gist更新请求失败: ${JSON.stringify(error)}`);
+				debugLog(`错误详情: ${JSON.stringify(error)}`);
+				$.msg(NOTIFY_TITLE, 'Gist更新请求失败', `${error}`);
+				return;
+			}
+
+			const statusCode = response.status || response.statusCode || 0;
+			debugLog(`Gist更新响应状态码: ${statusCode}`);
+
+			if (statusCode === 200) {
+				console.log('成功更新Gist');
+				debugLog(`更新成功，响应数据: ${data.substring(0, 100)}...`);
+				$.msg(NOTIFY_TITLE, 'Gist更新成功', `数据已成功推送到Gist - ${timestamp}`);
+			} else if (statusCode === 404) {
+				console.log('Gist不存在，尝试创建新的Gist');
+				debugLog('404错误，指定的Gist不存在');
+				$.msg(NOTIFY_TITLE, '指定的Gist不存在', '正在尝试创建新的Gist');
+				createGist(files, timestamp);
+			} else {
+				console.log(`Gist更新失败: 状态码 ${statusCode}`);
+				debugLog(`更新失败响应数据: ${data}`);
+				$.msg(NOTIFY_TITLE, 'Gist更新失败', `状态码: ${statusCode}\n${data.substring(0, 100)}`);
+			}
 		}
+	);
+}
 
-		const statusCode = response.status || response.statusCode || 0;
+// 自定义请求函数，支持PATCH方法
+function customRequest(options, callback) {
+	const method = options.method || 'GET';
 
-		if (statusCode === 200) {
-			console.log('成功更新Gist');
-			$.msg(NOTIFY_TITLE, 'Gist更新成功', `数据已成功推送到Gist - ${timestamp}`);
-		} else if (statusCode === 404) {
-			console.log('Gist不存在，尝试创建新的Gist');
-			$.msg(NOTIFY_TITLE, '指定的Gist不存在', '正在尝试创建新的Gist');
-			createGist(files, timestamp);
-		} else {
-			console.log(`Gist更新失败: ${statusCode}`);
-			console.log(data);
-			$.msg(NOTIFY_TITLE, 'Gist更新失败', `状态码: ${statusCode}`);
-		}
-	});
+	if ($.isQuanX()) {
+		options.method = method;
+		$task.fetch(options).then(
+			response => {
+				const { statusCode, headers, body } = response;
+				callback(null, { status: statusCode, headers, body }, body);
+			},
+			reason => {
+				debugLog(`请求失败: ${JSON.stringify(reason)}`);
+				callback(reason.error, null, null);
+			}
+		);
+	} else if ($.isSurge() || $.isLoon() || $.isStash()) {
+		$httpClient[method.toLowerCase()](options, (error, response, body) => {
+			callback(error, response, body);
+		});
+	} else {
+		debugLog('不支持的环境');
+		callback('不支持的环境', null, null);
+	}
 }
 
 // HTTP请求处理函数
 function processRequest(request) {
 	try {
+		debugLog('开始处理请求...');
+		debugLog(`请求URL: ${request.url}`);
+
 		// 获取请求头和请求体
 		const headers = request.headers;
 		let requestBody = {};
 
+		debugLog(`请求头: ${JSON.stringify(headers)}`);
+
 		// 尝试解析请求体为JSON (如果是JSON格式)
 		try {
 			if (request.body) {
+				debugLog(`原始请求体: ${request.body}`);
+
 				// 判断请求体是否为JSON字符串
 				const bodyText = decodeURIComponent(request.body);
 				if (bodyText.trim().startsWith('{') && bodyText.trim().endsWith('}')) {
 					requestBody = JSON.parse(bodyText);
+					debugLog('请求体已解析为JSON对象');
 				} else {
 					// 尝试解析表单编码的请求体
+					debugLog('尝试解析为表单数据');
 					const formParams = bodyText.split('&');
 					formParams.forEach(param => {
 						const [key, value] = param.split('=');
@@ -207,15 +274,20 @@ function processRequest(request) {
 							requestBody[key] = decodeURIComponent(value);
 						}
 					});
+					debugLog('请求体已解析为表单数据对象');
 				}
+			} else {
+				debugLog('请求体为空');
 			}
 		} catch (e) {
-			console.log('解析请求体出错: ' + e);
+			console.log(`解析请求体出错: ${e}`);
+			debugLog(`解析请求体出错: ${e.stack || e}`);
 			requestBody = { raw: request.body };
 		}
 
 		// 提取需要的信息
 		const vid = headers.vid || '';
+		debugLog(`提取的VID: ${vid}`);
 
 		// 构建结果JSON对象
 		const result = {
@@ -233,12 +305,14 @@ function processRequest(request) {
 		console.log('微信读书登录信息:\n' + jsonResult);
 
 		// 推送到GitHub Gist
+		debugLog('准备推送到GitHub Gist');
 		pushToGist(result);
 
 		// 返回原始请求内容，不做修改
 		return request;
 	} catch (err) {
-		console.log('处理请求时出错: ' + err);
+		console.log(`处理请求时出错: ${err}`);
+		debugLog(`处理请求时出错: ${err.stack || err}`);
 		$.msg(NOTIFY_TITLE, NOTIFY_ERROR_MSG, err.toString());
 		return request;
 	}
@@ -246,10 +320,14 @@ function processRequest(request) {
 
 // 主函数
 function main() {
+	debugLog('脚本开始执行');
+
 	if ($request) {
+		debugLog('检测到请求，开始处理');
 		const modifiedRequest = processRequest($request);
 		$done(modifiedRequest);
 	} else {
+		debugLog('没有检测到请求');
 		$done({});
 	}
 }
@@ -296,8 +374,15 @@ function addBoxJSSubscription() {
 				type: 'boolean',
 				desc: '是否将信息上传到GitHub Gist',
 			},
+			{
+				id: 'wr_debug_mode',
+				name: '启用调试模式',
+				val: false,
+				type: 'boolean',
+				desc: '是否输出详细调试信息',
+			},
 		],
-		author: '@ZiGma',
+		author: '@ZiGma (改进版)',
 		repo: 'https://github.com/ZiGmaX809/PrivateRules',
 		icons: [
 			'https://raw.githubusercontent.com/ZiGmaX809/PrivateRules/refs/heads/master/QuantumultX/img/weread.png',
