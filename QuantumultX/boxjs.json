@@ -1,0 +1,65 @@
+{
+	"id": "zigmax.wereading",
+	"name": "微信读书工具",
+	"author": "@ZiGmaX809",
+	"icon": "https://raw.githubusercontent.com/Orz-3/mini/master/Color/Read.png",
+	"repo": "https://github.com/ZiGmaX809/PrivateRules",
+	"apps": [
+		{
+			"id": "WeReadLogin",
+			"name": "微信读书登录信息监控",
+			"desc": "监控并保存微信读书的登录请求信息",
+			"keys": [
+				"wr_github_token",
+				"wr_gist_id",
+				"wr_gist_filename",
+				"wr_gist_description",
+				"wr_enable_gist"
+			],
+			"author": "@ZiGmaX809",
+			"repo": "https://github.com/ZiGmaX809/PrivateRules",
+			"icons": [
+				"https://raw.githubusercontent.com/Orz-3/mini/master/Color/Read.png",
+				"https://raw.githubusercontent.com/Orz-3/mini/master/Color/Read.png"
+			],
+			"script": "https://raw.githubusercontent.com/ZiGmaX809/PrivateRules/refs/heads/master/QuantumultX/Scripts/Get_WeRead_Cookie/weread_login_monitor.js",
+			"settings": [
+				{
+					"id": "wr_github_token",
+					"name": "GitHub Token",
+					"val": "",
+					"type": "text",
+					"desc": "请输入GitHub Personal Access Token"
+				},
+				{
+					"id": "wr_gist_id",
+					"name": "Gist ID",
+					"val": "",
+					"type": "text",
+					"desc": "留空将自动创建新的Gist"
+				},
+				{
+					"id": "wr_gist_filename",
+					"name": "Gist文件名",
+					"val": "weread_login_info.json",
+					"type": "text",
+					"desc": "Gist中的文件名"
+				},
+				{
+					"id": "wr_gist_description",
+					"name": "Gist描述",
+					"val": "微信读书登录信息",
+					"type": "text",
+					"desc": "Gist的描述信息"
+				},
+				{
+					"id": "wr_enable_gist",
+					"name": "启用Gist上传",
+					"val": true,
+					"type": "boolean",
+					"desc": "是否将信息上传到GitHub Gist"
+				}
+			]
+		}
+	]
+}
