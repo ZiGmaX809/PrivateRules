@@ -19,7 +19,8 @@
 			"author": "@ZiGmaX809",
 			"repo": "https://github.com/ZiGmaX809/PrivateRules",
 			"icons": [
-				"https://raw.githubusercontent.com/ZiGmaX809/PrivateRules/refs/heads/master/QuantumultX/img/weread.png"
+				"https://raw.githubusercontent.com/ZiGmaX809/PrivateRules/refs/heads/master/QuantumultX/img/weread.png",
+                "https://raw.githubusercontent.com/ZiGmaX809/PrivateRules/refs/heads/master/QuantumultX/img/weread.png"
 			],
 			"script": "https://raw.githubusercontent.com/ZiGmaX809/PrivateRules/refs/heads/master/QuantumultX/Scripts/Get_WeRead_Cookie/weread_login_monitor.js",
 			"settings": [
