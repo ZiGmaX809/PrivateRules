@@ -60,10 +60,10 @@ function pushToGist(data) {
 	const dataWithTimestamp = {
 		...data,
 		timestamp: timestamp,
-		deviceInfo: {
-			device: $.isNode ? 'Node.js' : $.isQuanX ? 'QuanX' : $.isSurge ? 'Surge' : 'Unknown',
-			version: $.isNode ? process.version : 'App',
-		},
+		// deviceInfo: {
+		// 	device: $.isNode ? 'Node.js' : $.isQuanX ? 'QuanX' : $.isSurge ? 'Surge' : 'Unknown',
+		// 	version: $.isNode ? process.version : 'App',
+		// },
 	};
 
 	const content = JSON.stringify(dataWithTimestamp, null, 2);
