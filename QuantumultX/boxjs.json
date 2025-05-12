@@ -2,7 +2,7 @@
 	"id": "zigmax.wereading",
 	"name": "微信读书工具",
 	"author": "@ZiGmaX809",
-	"icon": "https://raw.githubusercontent.com/Orz-3/mini/master/Color/Read.png",
+	"icon": "https://raw.githubusercontent.com/ZiGmaX809/PrivateRules/refs/heads/master/QuantumultX/img/weread.png",
 	"repo": "https://github.com/ZiGmaX809/PrivateRules",
 	"apps": [
 		{
@@ -19,8 +19,7 @@
 			"author": "@ZiGmaX809",
 			"repo": "https://github.com/ZiGmaX809/PrivateRules",
 			"icons": [
-				"https://raw.githubusercontent.com/Orz-3/mini/master/Color/Read.png",
-				"https://raw.githubusercontent.com/Orz-3/mini/master/Color/Read.png"
+				"https://raw.githubusercontent.com/ZiGmaX809/PrivateRules/refs/heads/master/QuantumultX/img/weread.png"
 			],
 			"script": "https://raw.githubusercontent.com/ZiGmaX809/PrivateRules/refs/heads/master/QuantumultX/Scripts/Get_WeRead_Cookie/weread_login_monitor.js",
 			"settings": [
