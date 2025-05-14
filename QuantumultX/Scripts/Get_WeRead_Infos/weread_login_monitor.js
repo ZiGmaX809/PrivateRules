@@ -179,10 +179,6 @@ async function pushToGist(content) {
             }
           };
 
-		  $.log(`更新Gist: ${gistId}`);
-		  // 更新Gist
-		  $.log(updateData)
-          
           const updateResult = await $.http.patch({
             url: `https://api.github.com/gists/${gistId}`,
             headers: headers,
