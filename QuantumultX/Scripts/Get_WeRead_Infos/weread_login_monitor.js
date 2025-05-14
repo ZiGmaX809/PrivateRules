@@ -179,7 +179,7 @@ async function pushToGist(content) {
             }
           };
           
-          const updateResult = await $.http.patch({
+          const updateResult = await $.http.put({
             url: `https://api.github.com/gists/${gistId}`,
             headers: headers,
             body: JSON.stringify(updateData)
