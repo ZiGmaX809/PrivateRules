@@ -5,7 +5,7 @@
  * 2. 提取header中的vid和完整的request_body
  * 3. 将提取的信息格式化为JSON
  * 4. 发送通知提示用户
- * 5. 将信息推送到GitHub Gist
+ * 5. 将信息推送到GitHub Gist，优先查找并更新已存在的指定文件
  *
  * 使用方法：
  * 1. 将此脚本添加到Quantumult X的rewrite_local配置中
@@ -154,13 +154,72 @@ async function pushToGist(content) {
       'User-Agent': 'WeReadLoginMonitor'
     };
     
-    // 检查是否存在指定的gistId
-    if (gistId) {
+    // 查找所有当前用户的gists
+    let targetGistId = null;
+    let needCreateNew = true;
+    
+    try {
+      // 首先尝试查找包含指定文件名的gist
+      const gistsResult = await $.http.get({
+        url: 'https://api.github.com/gists',
+        headers: headers
+      }).then(response => {
+        return { 
+          status: response.statusCode, 
+          body: response.body 
+        };
+      });
+      
+      if (gistsResult.status === 200) {
+        const gists = JSON.parse(gistsResult.body);
+        if (Array.isArray(gists)) {
+          // 查找包含指定文件名的gist
+          for (const gist of gists) {
+            if (gist.files && gist.files[gistFilename]) {
+              targetGistId = gist.id;
+              needCreateNew = false;
+              if (debugMode) {
+                $.log(`找到包含文件 ${gistFilename} 的Gist: ${targetGistId}`);
+              }
+              break;
+            }
+          }
+          
+          // 如果没找到包含指定文件的gist，但指定了gistId，则尝试使用该gistId
+          if (needCreateNew && gistId) {
+            targetGistId = gistId;
+            needCreateNew = false;
+            if (debugMode) {
+              $.log(`未找到包含文件 ${gistFilename} 的Gist，将使用指定的Gist ID: ${targetGistId}`);
+            }
+          }
+        }
+      }
+    } catch (error) {
+      $.log(`查找Gist时出错: ${error}`);
+      // 查找出错但指定了gistId，则尝试使用该gistId
+      if (gistId) {
+        targetGistId = gistId;
+        needCreateNew = false;
+      }
+    }
+    
+    // 更新现有Gist
+    if (!needCreateNew && targetGistId) {
       try {
-        // 获取现有Gist
-        const checkResult = await $.http.get({
-          url: `https://api.github.com/gists/${gistId}`,
-          headers: headers
+        const updateData = {
+          description: gistDescription,
+          files: {
+            [gistFilename]: {
+              content: content
+            }
+          }
+        };
+
+        const updateResult = await $.http.patch({
+          url: `https://api.github.com/gists/${targetGistId}`,
+          headers: headers,
+          body: JSON.stringify(updateData)
         }).then(response => {
           return { 
             status: response.statusCode, 
@@ -168,49 +227,28 @@ async function pushToGist(content) {
           };
         });
         
-        if (checkResult.status === 200) {
-          // Gist存在，更新它
-          const updateData = {
-            description: gistDescription,
-            files: {
-              [gistFilename]: {
-                content: content
-              }
-            }
-          };
-
-          const updateResult = await $.http.patch({
-            url: `https://api.github.com/gists/${gistId}`,
-            headers: headers,
-            body: JSON.stringify(updateData)
-          }).then(response => {
-            return { 
-              status: response.statusCode, 
-              body: response.body 
-            };
-          });
-          
-          if (updateResult.status === 200) {
-            if (debugMode) {
-              $.log(`Gist更新成功: ${gistId}`);
-            }
-            return { success: true, message: `Gist已更新: ${gistId}` };
-          } else {
-            $.log(`Gist更新失败: ${JSON.stringify(updateResult)}`);
-            return { success: false, message: `Gist更新失败: ${updateResult.status}` };
+        if (updateResult.status === 200) {
+          if (debugMode) {
+            $.log(`Gist更新成功: ${targetGistId}, 文件: ${gistFilename}`);
           }
+          
+          // 如果之前没有存储过gistId，则现在存储
+          if (!gistId) {
+            $.setdata(targetGistId, 'wr_gist_id');
+          }
+          
+          return { success: true, message: `Gist已更新: ${targetGistId}` };
         } else {
-          $.log(`指定的Gist不存在或无权限访问: ${gistId}`);
-          // Gist不存在，创建新的
-          return await createNewGist(content, headers);
+          $.log(`Gist更新失败: ${JSON.stringify(updateResult)}`);
+          return { success: false, message: `Gist更新失败: ${updateResult.status}` };
         }
       } catch (error) {
-        $.log(`检查Gist时出错: ${error}`);
-        // 出错时尝试创建新的
+        $.log(`更新Gist时出错: ${error}`);
+        // 出错则尝试创建新的
         return await createNewGist(content, headers);
       }
     } else {
-      // 未指定gistId，创建新的
+      // 需要创建新的Gist
       return await createNewGist(content, headers);
     }
   } catch (error) {
@@ -257,7 +295,7 @@ async function createNewGist(content, headers) {
         if (newGistId) {
           $.setdata(newGistId, 'wr_gist_id');
           if (debugMode) {
-            $.log(`新Gist已创建: ${newGistId}`);
+            $.log(`新Gist已创建: ${newGistId}, 文件: ${gistFilename}`);
           }
           return { success: true, message: `新Gist已创建: ${newGistId}` };
         }
